@@ -1,13 +1,13 @@
 package main.client;
 
 import main.config.Config;
+import main.config.Environment;
 import main.dto.AuthRequest;
+import main.dto.OrderRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Client {
@@ -19,9 +19,17 @@ public class Client {
     }
 
     public Client(){
-        //TODO por ahora es un STAGE mock pero este constructor servira para indicarle por env variable el environment
-        Config defaultConfig = new Config("STAGE");
-        this.config = defaultConfig;
+
+        String environment = System.getenv("ENVIRONMENT");
+        Config config;
+        if(environment != null && (environment.toLowerCase().equals(Environment.STAGE.getEnvironment()) ||
+                environment.toLowerCase().equals(Environment.PRODUCTION.getEnvironment()))){
+            config = new Config(environment.toLowerCase());
+            this.config = config;
+        } else {
+            Config defaultConfig = new Config("STAGE");
+            this.config = defaultConfig;
+        }
     }
 
     public Config getConfig() {
@@ -60,13 +68,10 @@ public class Client {
         try(OutputStream os = con.getOutputStream()) {
             byte[] input = authRequestStr.getBytes("utf-8");
             os.write(input, 0, input.length);
-        } catch (Exception e){
-            return "Error al intentar enviar el req";
         }
 
 
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
             StringBuilder response = new StringBuilder();
             String responseLine = null;
             while ((responseLine = br.readLine()) != null) {
@@ -79,14 +84,49 @@ public class Client {
             //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
             return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to auth"+'"'+"}";
         }
-
-
     }
 
     //CreateOrder
 
-    public String createOrder(){
-    return null;
+    public String createOrder(OrderRequest or, String authToken) throws IOException {
+
+        URL url = new URL(String.format("%s%s", config.getApiBaseUrl(), "/checkout"));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", String.format("%s %s", "Bearer", authToken));
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+
+
+        //TODO ver si no hay una forma nativa mas linda de hacer este request... (sin utilizar jackson o gson)
+        String orderReqStr = "{" + '"'+"amount"+'"' +":"+'"'+or.getAmount()+ '"'+ "," +
+                '"'+ "description"+'"' +":"+'"'+or.getDescription()+'"'+","+
+                '"'+ "userName" +'"'+":"+'"'+or.getUsername()+'"'+ ","+
+                '"'+"callback_fail" + '"'+":"+'"'+or.getCallbackFail() +'"'+ ","+
+                '"'+ "callback_success" +'"'+":"+'"'+or.getCallbackSuccess()+'"'+ ","+
+                '"'+ "notification_url" +'"'+":"+'"'+or.getNotificationURL()+'"'+ ","+
+                '"'+ "origin" +'"'+":"+'"'+or.getOrigin()+'"'+
+                "}";
+
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = orderReqStr.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            return response.toString();
+        } catch (Exception e) {
+            //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
+            return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to create order"+'"'+"}";
+        }
     }
 
     //GetOrder
