@@ -41,5 +41,19 @@ public class Main {
         System.out.println("");
         System.out.println(respuesta2);
         System.out.println("");
+
+
+        System.out.println(">>>>>>>>>>>>>>>>>");
+        System.out.println("Obteniendo una orden...");
+        System.out.println("");
+        String orderID = "356ecd18-a974-464b-bd56-80cdf166016e";
+        String respuesta3 = client.getOrder(orderID, tokenTemporal);
+        System.out.println("");
+        System.out.println("Orden obtenida-->");
+        System.out.println("");
+        System.out.println(respuesta3);
+        System.out.println("");
+
+
     }
 }
