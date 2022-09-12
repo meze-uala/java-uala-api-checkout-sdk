@@ -6,8 +6,7 @@ import main.dto.AuthRequest;
 import main.dto.OrderRequest;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
+import java.net.HttpURLConnection; 
 import java.net.URL;
 
 public class Client {
@@ -59,6 +58,7 @@ public class Client {
         con.setDoOutput(true);
 
         //TODO ver si no hay una forma nativa mas linda de hacer este request... (sin utilizar jackson o gson)
+        // TOSTRING ver si lo transforma good
         String authRequestStr = "{" + '"'+"user_name"+'"' +":"+request.getUsername()+ "," +
                 '"'+ "client_id"+'"' +":"+'"'+request.getClientID()+'"'+","+
                 '"'+ "client_secret_id" +'"'+":"+'"'+request.getClientSecretID()+'"'+ ","+

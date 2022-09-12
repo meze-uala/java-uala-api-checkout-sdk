@@ -1,7 +1,6 @@
 package main;
 
 import main.client.Client;
-import main.config.Config;
 import main.dto.AuthRequest;
 import main.dto.OrderRequest;
 
@@ -13,8 +12,8 @@ public class Main {
 
         Client client = new Client();
 
-        AuthRequest req = new AuthRequest("new_user_1631906477", "5qqGKGm4EaawnAH0J6xluc6AWdQBvLW3",
-                "cVp1iGEB-DE6KtL4Hi7tocdopP2pZxzaEVciACApWH92e8_Hloe8CD5ilM63NppG","client_credentials");
+        AuthRequest req = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN",
+                "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8","client_credentials");
 
         String respuesta = client.getAuthToken(req);
         System.out.println(">>>>>>>>>>>>>>>>>");
@@ -25,12 +24,12 @@ public class Main {
         System.out.println(respuesta);
         System.out.println("");
 
-        OrderRequest or = new OrderRequest("12.12", "TE QUIERO DIEGOOOOOOOO!", "new_user_1631906477",
+        OrderRequest or = new OrderRequest("12.12", "TE QUIERO DIEGOOOOOOOO!", "javauser",
                 "https://www.google.com.ar","https://www.exito.com", "https://www.notif.com.ar",
                 "EMPRETIENDA");
 
 
-        String tokenTemporal = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5Ua01mWF82QVhWbnJHQTVLWF8zYyJ9.eyJpc3MiOiJodHRwczovL3VhbGEtYXJnLWFwcC1zdGFnZS51cy5hdXRoMC5jb20vIiwic3ViIjoiNXFxR0tHbTRFYWF3bkFIMEo2eGx1YzZBV2RRQnZMVzNAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vdWFsYS1hcmctYXBwLXN0YWdlLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNjYyNzU0NTA3LCJleHAiOjE2NjI4NDA5MDcsImF6cCI6IjVxcUdLR200RWFhd25BSDBKNnhsdWM2QVdkUUJ2TFczIiwic2NvcGUiOiJjcmVhdGU6Y2xpZW50X2dyYW50cyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.W13HiuFD5YB9pgNC4WYvifJb8FA14dV_A6oabdkYWUAkTu8vouVqJ4MACJObWx_KzniM4bLrA7xOdf_5lORF8tFk25CLNMRa68dRfuwEDJHhkVj82t6eeLNnibetkR3yovMQEhGDVliQ10qLJQlXd4ku8JCnSAUQ6Tmoy25l82LksgHb38k_vDPSo34ALB3TmmWI9rsnUnyQP0axEoXq11cCG--t_3jqPPAvzX2WIx5PgrVlRijP7rzNkM3IO_LIoNuuH9wbqDyodi0txa0_NNEFZLE4LOukHfPN_I8GhyiY1Dy2fZ0vCIThslfVnME4NNGDCOTy2BzMyWQdu72nkA";
+        String tokenTemporal = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlMyYW5BTjVYRWFjWU1qTXV2eFlZaiJ9.eyJpc3MiOiJodHRwczovL3VhbGEtYXJnLWFwaS1kZXYudXMuYXV0aDAuY29tLyIsInN1YiI6InFTQlJidE9iRm41R0pKbll2bTJNM3BTbjEzamdIUE1OQGNsaWVudHMiLCJhdWQiOiJodHRwczovL3VhbGEtYXJnLWFwaS1kZXYudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJpYXQiOjE2NjI5OTIxNTMsImV4cCI6MTY2MzA3ODU1MywiYXpwIjoicVNCUmJ0T2JGbjVHSkpuWXZtMk0zcFNuMTNqZ0hQTU4iLCJzY29wZSI6ImFwaV9jaGVja291dDpjcmVhdGUiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.j_mfN64b4I9KO8NwsRKJ1OZNKqlHSoOLMGI4LxjBIDmOb3BpDJyeRXGuXI_Uzn_IMCRAXV0Xci2B9MUXPZrjzr6Fa2zSpyrHQ7SDATZ_4fJmQo5o-2CRzCT3dq2vLYcquGXnvL20FqsMPJB0xjYACKwwuROpq94pi49DMNGnDFBl9fHlYG13zFHRbtzx2xF8JXb9-LxGLF__8I0s3Zl1MEhFvt_86mj_G26huYZuHnOn7KDa9RjsF_5VxHvJr6-w_KzWco9jYTCX--hT4zUgwGEDAYDK_Nh7HtdS3DVfMp0u_h8cDu8aBa1OO1Rdh8h5ie7QMknD_ybxyJjJOJDMYA";
 
         System.out.println(">>>>>>>>>>>>>>>>>");
         System.out.println("Creando una orden...");
@@ -46,7 +45,7 @@ public class Main {
         System.out.println(">>>>>>>>>>>>>>>>>");
         System.out.println("Obteniendo una orden...");
         System.out.println("");
-        String orderID = "356ecd18-a974-464b-bd56-80cdf166016e";
+        String orderID = "0fec34b8-b407-4381-8729-efb64c09fca5";
         String respuesta3 = client.getOrder(orderID, tokenTemporal);
         System.out.println("");
         System.out.println("Orden obtenida-->");

@@ -4,6 +4,7 @@ public class AuthRequest {
     private String username;
     private String clientID;
     private String clientSecretID;
+    //Hardcodear
     private String grantType;
 
 
