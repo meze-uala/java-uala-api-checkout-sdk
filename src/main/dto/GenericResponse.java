@@ -1,12 +1,22 @@
 package main.dto;
 
-public class GenericResponse {
-    private String code;
-    private String description;
+import com.google.gson.annotations.SerializedName;
 
-    public GenericResponse(String code, String description) {
+public class GenericResponse {
+    @SerializedName("code")
+    private String code;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("message")
+    private String message;
+    @SerializedName("Message")
+    private String missingTokenMessage;
+
+    public GenericResponse(String code, String description, String message, String missingTokenMessage) {
         this.code = code;
         this.description = description;
+        this.message = message;
+        this.missingTokenMessage = missingTokenMessage;
     }
 
     public String getCode() {

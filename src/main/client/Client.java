@@ -3,10 +3,7 @@ package main.client;
 import com.google.gson.Gson;
 import main.config.Config;
 import main.config.Environment;
-import main.dto.AuthRequest;
-import main.dto.AuthResponse;
-import main.dto.GenericResponse;
-import main.dto.OrderRequest;
+import main.dto.*;
 
 import java.io.*;
 import java.net.HttpURLConnection; 
@@ -98,7 +95,7 @@ public class Client {
                 return getEncoder().toJson(authResponse);
             }
         } catch (Exception e){
-            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken");
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
             return getEncoder().toJson(gr);
         }
     }
@@ -113,9 +110,7 @@ public class Client {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
-        Gson gson = new Gson();
-
-        String orderReqJson = gson.toJson(or);
+        String orderReqJson = getEncoder().toJson(or);
 
         try(OutputStream os = con.getOutputStream()) {
             byte[] input = orderReqJson.getBytes("utf-8");
@@ -143,15 +138,15 @@ public class Client {
             in.close();
 
             if (status > 299) {
-                GenericResponse gr = gson.fromJson(content.toString(), GenericResponse.class);
-                return gson.toJson(gr);
+                GenericResponse gr = getEncoder().fromJson(content.toString(), GenericResponse.class);
+                return getEncoder().toJson(gr);
             } else {
-                AuthResponse authResponse = gson.fromJson(content.toString(), AuthResponse.class);
-                return gson.toJson(authResponse);
+                OrderResponse orderResponse = getEncoder().fromJson(content.toString(), OrderResponse.class);
+                return getEncoder().toJson(orderResponse);
             }
         } catch (Exception e){
-            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken");
-            return gson.toJson(gr);
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
+            return getEncoder().toJson(gr);
         }
 
     }
@@ -191,7 +186,7 @@ public class Client {
     }
 
     public String invalidAuthRequest(){
-        GenericResponse response = new GenericResponse("3001", "One or more required fields are empty");
+        GenericResponse response = new GenericResponse("3001", "One or more required fields are empty", null, null);
         Gson gson = new Gson();
         return gson.toJson(response);
     }

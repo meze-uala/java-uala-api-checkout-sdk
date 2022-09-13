@@ -1,37 +1,42 @@
 package main.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AuthResponse {
-    private String access_token;
-    private int expires_in;
-    private String token_type;
+    @SerializedName("access_token")
+    private String accessToken;
+    @SerializedName("expires_in")
+    private int expiresIn;
+    @SerializedName("token_type")
+    private String tokenType;
 
     public AuthResponse(String access_token, int expires_in, String token_type) {
-        this.access_token = access_token;
-        this.expires_in = expires_in;
-        this.token_type = token_type;
+        this.accessToken = access_token;
+        this.expiresIn = expires_in;
+        this.tokenType = token_type;
     }
 
-    public String getAccess_token() {
-        return access_token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setAccess_token(String access_token) {
-        this.access_token = access_token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public int getExpires_in() {
-        return expires_in;
+    public int getExpiresIn() {
+        return expiresIn;
     }
 
-    public void setExpires_in(int expires_in) {
-        this.expires_in = expires_in;
+    public void setExpiresIn(int expiresIn) {
+        this.expiresIn = expiresIn;
     }
 
-    public String getToken_type() {
-        return token_type;
+    public String getTokenType() {
+        return tokenType;
     }
 
-    public void setToken_type(String token_type) {
-        this.token_type = token_type;
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 }
