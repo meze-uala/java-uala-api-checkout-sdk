@@ -1,8 +1,10 @@
 package main.client;
 
+import com.google.gson.Gson;
 import main.config.Config;
 import main.config.Environment;
 import main.dto.AuthRequest;
+import main.dto.GenericResponse;
 import main.dto.OrderRequest;
 
 import java.io.*;
@@ -39,16 +41,11 @@ public class Client {
         this.config = config;
     }
 
-    // Auth
     public String getAuthToken(AuthRequest request) throws IOException {
 
-        //TODO evaluar si vale la pena poner un validator antes, evitando asi un request en vano
-        /*
         if (!request.validRequest()){
-            //Usar el AuthResponse to json
-            return "Error on validateRequest";
+            return invalidAuthRequest();
         }
-        */
 
         URL url = new URL(String.format("%s%s", config.getAuthAPIbaseUrl(), "/token"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -57,36 +54,46 @@ public class Client {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
-        //TODO ver si no hay una forma nativa mas linda de hacer este request... (sin utilizar jackson o gson)
-        // TOSTRING ver si lo transforma good
-        String authRequestStr = "{" + '"'+"user_name"+'"' +":"+request.getUsername()+ "," +
-                '"'+ "client_id"+'"' +":"+'"'+request.getClientID()+'"'+","+
-                '"'+ "client_secret_id" +'"'+":"+'"'+request.getClientSecretID()+'"'+ ","+
-                '"'+"grant_type" + '"'+":"+'"'+request.getGrantType() +'"'+
-                "}";
+        Gson gson = new Gson();
+        String requestGSON = gson.toJson(request);
+
 
         try(OutputStream os = con.getOutputStream()) {
-            byte[] input = authRequestStr.getBytes("utf-8");
+            byte[] input = requestGSON.getBytes("utf-8");
             os.write(input, 0, input.length);
-        }
 
+        } catch (Exception e) {
+            GenericResponse response = new GenericResponse("999", "an error occurred when trying to read request body");
+            return gson.toJson(response);
+        }
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
             StringBuilder response = new StringBuilder();
             String responseLine = null;
+
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-
             return response.toString();
 
         } catch (Exception e) {
-            //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
-            return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to auth"+'"'+"}";
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream(), "utf-8"))) {
+                StringBuilder errResponse = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    errResponse.append(responseLine.trim());
+                }
+
+                return gson.toJson(errResponse.toString());
+
+            } catch (Exception d){
+                d.printStackTrace();
+                GenericResponse response = new GenericResponse("999", "an error occurred when trying to auth");
+                return gson.toJson(response);
+            }
         }
     }
-
-    //CreateOrder
 
     public String createOrder(OrderRequest or, String authToken) throws IOException {
 
@@ -161,5 +168,11 @@ public class Client {
             //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
             return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to create order"+'"'+"}";
         }
+    }
+
+    public String invalidAuthRequest(){
+        GenericResponse response = new GenericResponse("3001", "One or more required fields are empty");
+        Gson gson = new Gson();
+        return gson.toJson(response);
     }
 }

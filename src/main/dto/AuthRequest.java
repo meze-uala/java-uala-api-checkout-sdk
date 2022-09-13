@@ -1,54 +1,49 @@
 package main.dto;
 
 public class AuthRequest {
-    private String username;
-    private String clientID;
-    private String clientSecretID;
-    //Hardcodear
-    private String grantType;
+    private String user_name;
+    private String client_id;
+    private String client_secret_id;
+    private String grant_type;
 
 
-    public AuthRequest(String username, String clientID, String clientSecretID, String grantType) {
-        this.username = username;
-        this.clientID = clientID;
-        this.clientSecretID = clientSecretID;
-        this.grantType = grantType;
+    public AuthRequest(String username, String clientID, String clientSecretID) {
+        this.user_name = username;
+        this.client_id = clientID;
+        this.client_secret_id = clientSecretID;
+        this.grant_type = "client_credentials";
     }
 
-    public String getUsername() {
-        return username;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
-    public String getClientID() {
-        return clientID;
+    public String getClient_id() {
+        return client_id;
     }
 
-    public void setClientID(String clientID) {
-        this.clientID = clientID;
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
     }
 
-    public String getClientSecretID() {
-        return clientSecretID;
+    public String getClient_secret_id() {
+        return client_secret_id;
     }
 
-    public void setClientSecretID(String clientSecretID) {
-        this.clientSecretID = clientSecretID;
+    public void setClient_secret_id(String client_secret_id) {
+        this.client_secret_id = client_secret_id;
     }
 
     public String getGrantType() {
-        return grantType;
+        return grant_type;
     }
 
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
-    }
-    //TODO PROBAR ESTO
     public boolean validRequest(){
-        return this.getUsername()!="" && this.getUsername()!=null && this.getClientID() != "" && this.getClientID() != null
-                && this.getClientSecretID() != "" && this.getClientSecretID() != null && this.getGrantType().equals("client_credentials");
+        return this.getUser_name()!="" && this.getUser_name()!=null && this.getClient_id() != "" && this.getClient_id() != null
+                && this.getClient_secret_id() != "" && this.getClient_secret_id() != null && this.getGrantType().equals("client_credentials");
     }
 }

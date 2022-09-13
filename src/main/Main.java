@@ -13,7 +13,7 @@ public class Main {
         Client client = new Client();
 
         AuthRequest req = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN",
-                "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8","client_credentials");
+                "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
 
         String respuesta = client.getAuthToken(req);
         System.out.println(">>>>>>>>>>>>>>>>>");
