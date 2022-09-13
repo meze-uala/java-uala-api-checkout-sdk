@@ -1,13 +1,15 @@
 package main.client;
 
+import com.google.gson.Gson;
 import main.config.Config;
 import main.config.Environment;
 import main.dto.AuthRequest;
+import main.dto.AuthResponse;
+import main.dto.GenericResponse;
 import main.dto.OrderRequest;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
+import java.net.HttpURLConnection; 
 import java.net.URL;
 
 public class Client {
@@ -19,7 +21,6 @@ public class Client {
     }
 
     public Client(){
-
         String environment = System.getenv("ENVIRONMENT");
         Config config;
         if(environment != null && (environment.toLowerCase().equals(Environment.STAGE.getEnvironment()) ||
@@ -40,16 +41,11 @@ public class Client {
         this.config = config;
     }
 
-    // Auth
     public String getAuthToken(AuthRequest request) throws IOException {
 
-        //TODO evaluar si vale la pena poner un validator antes, evitando asi un request en vano
-        /*
         if (!request.validRequest()){
-            //Usar el AuthResponse to json
-            return "Error on validateRequest";
+            return invalidAuthRequest();
         }
-        */
 
         URL url = new URL(String.format("%s%s", config.getAuthAPIbaseUrl(), "/token"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -58,35 +54,48 @@ public class Client {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
-        //TODO ver si no hay una forma nativa mas linda de hacer este request... (sin utilizar jackson o gson)
-        String authRequestStr = "{" + '"'+"user_name"+'"' +":"+request.getUsername()+ "," +
-                '"'+ "client_id"+'"' +":"+'"'+request.getClientID()+'"'+","+
-                '"'+ "client_secret_id" +'"'+":"+'"'+request.getClientSecretID()+'"'+ ","+
-                '"'+"grant_type" + '"'+":"+'"'+request.getGrantType() +'"'+
-                "}";
+        Gson gson = new Gson();
+        String gsonRequest = gson.toJson(request);
+
 
         try(OutputStream os = con.getOutputStream()) {
-            byte[] input = authRequestStr.getBytes("utf-8");
+            byte[] input = gsonRequest.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
+        int status = con.getResponseCode();
 
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        Reader streamReader = null;
+        //
+        if (status > 299) {
+            streamReader = new InputStreamReader(con.getErrorStream());
+        } else {
+            streamReader = new InputStreamReader(con.getInputStream());
+        }
+
+        try {
+
+
+            BufferedReader in = new BufferedReader(streamReader);
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
             }
+            in.close();
 
-            return response.toString();
-
-        } catch (Exception e) {
-            //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
-            return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to auth"+'"'+"}";
+            if (status > 299) {
+                GenericResponse gr = gson.fromJson(content.toString(), GenericResponse.class);
+                return gson.toJson(gr);
+            } else {
+                AuthResponse authResponse = gson.fromJson(content.toString(), AuthResponse.class);
+                return gson.toJson(authResponse);
+            }
+        } catch (Exception e){
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken");
+            return gson.toJson(gr);
         }
     }
-
-    //CreateOrder
 
     public String createOrder(OrderRequest or, String authToken) throws IOException {
 
@@ -161,5 +170,11 @@ public class Client {
             //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
             return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to create order"+'"'+"}";
         }
+    }
+
+    public String invalidAuthRequest(){
+        GenericResponse response = new GenericResponse("3001", "One or more required fields are empty");
+        Gson gson = new Gson();
+        return gson.toJson(response);
     }
 }

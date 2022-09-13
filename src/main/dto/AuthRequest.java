@@ -1,17 +1,23 @@
 package main.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AuthRequest {
+    @SerializedName("user_name")
     private String username;
+    @SerializedName("client_id")
     private String clientID;
+    @SerializedName("client_secret_id")
     private String clientSecretID;
+    @SerializedName("grant_type")
     private String grantType;
 
 
-    public AuthRequest(String username, String clientID, String clientSecretID, String grantType) {
+    public AuthRequest(String username, String clientID, String clientSecretID) {
         this.username = username;
         this.clientID = clientID;
         this.clientSecretID = clientSecretID;
-        this.grantType = grantType;
+        this.grantType = "client_credentials";
     }
 
     public String getUsername() {
@@ -42,10 +48,6 @@ public class AuthRequest {
         return grantType;
     }
 
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
-    }
-    //TODO PROBAR ESTO
     public boolean validRequest(){
         return this.getUsername()!="" && this.getUsername()!=null && this.getClientID() != "" && this.getClientID() != null
                 && this.getClientSecretID() != "" && this.getClientSecretID() != null && this.getGrantType().equals("client_credentials");
