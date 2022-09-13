@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import main.config.Config;
 import main.config.Environment;
 import main.dto.AuthRequest;
+import main.dto.AuthResponse;
 import main.dto.GenericResponse;
 import main.dto.OrderRequest;
 
@@ -20,7 +21,6 @@ public class Client {
     }
 
     public Client(){
-
         String environment = System.getenv("ENVIRONMENT");
         Config config;
         if(environment != null && (environment.toLowerCase().equals(Environment.STAGE.getEnvironment()) ||
@@ -55,43 +55,45 @@ public class Client {
         con.setDoOutput(true);
 
         Gson gson = new Gson();
-        String requestGSON = gson.toJson(request);
+        String gsonRequest = gson.toJson(request);
 
 
         try(OutputStream os = con.getOutputStream()) {
-            byte[] input = requestGSON.getBytes("utf-8");
+            byte[] input = gsonRequest.getBytes("utf-8");
             os.write(input, 0, input.length);
-
-        } catch (Exception e) {
-            GenericResponse response = new GenericResponse("999", "an error occurred when trying to read request body");
-            return gson.toJson(response);
         }
 
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
+        int status = con.getResponseCode();
 
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        Reader streamReader = null;
+        //
+        if (status > 299) {
+            streamReader = new InputStreamReader(con.getErrorStream());
+        } else {
+            streamReader = new InputStreamReader(con.getInputStream());
+        }
+
+        try {
+
+
+            BufferedReader in = new BufferedReader(streamReader);
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
             }
-            return response.toString();
+            in.close();
 
-        } catch (Exception e) {
-
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream(), "utf-8"))) {
-                StringBuilder errResponse = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    errResponse.append(responseLine.trim());
-                }
-
-                return gson.toJson(errResponse.toString());
-
-            } catch (Exception d){
-                d.printStackTrace();
-                GenericResponse response = new GenericResponse("999", "an error occurred when trying to auth");
-                return gson.toJson(response);
+            if (status > 299) {
+                GenericResponse gr = gson.fromJson(content.toString(), GenericResponse.class);
+                return gson.toJson(gr);
+            } else {
+                AuthResponse authResponse = gson.fromJson(content.toString(), AuthResponse.class);
+                return gson.toJson(authResponse);
             }
+        } catch (Exception e){
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken");
+            return gson.toJson(gr);
         }
     }
 
