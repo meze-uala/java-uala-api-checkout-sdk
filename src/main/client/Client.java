@@ -21,7 +21,7 @@ public class Client {
     }
 
     public Client(){
-        String environment = System.getenv("ENVIRONMENT");
+        String environment = System.getProperty("ENVIRONMENT");
         Config config;
         if(environment != null && (environment.toLowerCase().equals(Environment.STAGE.getEnvironment()) ||
                 environment.toLowerCase().equals(Environment.PRODUCTION.getEnvironment()))){
@@ -66,7 +66,7 @@ public class Client {
         int status = con.getResponseCode();
 
         Reader streamReader = null;
-        //
+
         if (status > 299) {
             streamReader = new InputStreamReader(con.getErrorStream());
         } else {
@@ -74,7 +74,6 @@ public class Client {
         }
 
         try {
-
 
             BufferedReader in = new BufferedReader(streamReader);
             String inputLine;
