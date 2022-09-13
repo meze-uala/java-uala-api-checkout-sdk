@@ -15,14 +15,17 @@ import java.net.URL;
 public class Client {
 
     private Config config;
+    private Gson encoder;
 
     public Client(Config config) {
         this.config = config;
+        this.encoder = new Gson();
     }
 
     public Client(){
         String environment = System.getProperty("ENVIRONMENT");
         Config config;
+        this.encoder = new Gson();
         if(environment != null && (environment.toLowerCase().equals(Environment.STAGE.getEnvironment()) ||
                 environment.toLowerCase().equals(Environment.PRODUCTION.getEnvironment()))){
             config = new Config(environment.toLowerCase());
@@ -35,6 +38,10 @@ public class Client {
 
     public Config getConfig() {
         return config;
+    }
+
+    public Gson getEncoder() {
+        return encoder;
     }
 
     public void setConfig(Config config) {
@@ -54,12 +61,64 @@ public class Client {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
-        Gson gson = new Gson();
-        String gsonRequest = gson.toJson(request);
+        //Gson gson = new Gson();
+        String gsonRequest = getEncoder().toJson(request);
 
 
         try(OutputStream os = con.getOutputStream()) {
             byte[] input = gsonRequest.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        int status = con.getResponseCode();
+
+        Reader streamReader = null;
+
+        if (status > 299) {
+            streamReader = new InputStreamReader(con.getErrorStream());
+        } else {
+            streamReader = new InputStreamReader(con.getInputStream());
+        }
+
+        try {
+
+            BufferedReader in = new BufferedReader(streamReader);
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+
+            if (status > 299) {
+                GenericResponse gr = getEncoder().fromJson(content.toString(), GenericResponse.class);
+                return getEncoder().toJson(gr);
+            } else {
+                AuthResponse authResponse = getEncoder().fromJson(content.toString(), AuthResponse.class);
+                return getEncoder().toJson(authResponse);
+            }
+        } catch (Exception e){
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken");
+            return getEncoder().toJson(gr);
+        }
+    }
+
+    public String createOrder(OrderRequest or, String authToken) throws IOException {
+
+        URL url = new URL(String.format("%s%s", config.getApiBaseUrl(), "/checkout"));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", String.format("%s %s", "Bearer", authToken));
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+
+        Gson gson = new Gson();
+
+        String orderReqJson = gson.toJson(or);
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = orderReqJson.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
@@ -94,47 +153,7 @@ public class Client {
             GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken");
             return gson.toJson(gr);
         }
-    }
 
-    public String createOrder(OrderRequest or, String authToken) throws IOException {
-
-        URL url = new URL(String.format("%s%s", config.getApiBaseUrl(), "/checkout"));
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Authorization", String.format("%s %s", "Bearer", authToken));
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-
-        //TODO ver si no hay una forma nativa mas linda de hacer este request... (sin utilizar jackson o gson)
-        String orderReqStr = "{" + '"'+"amount"+'"' +":"+'"'+or.getAmount()+ '"'+ "," +
-                '"'+ "description"+'"' +":"+'"'+or.getDescription()+'"'+","+
-                '"'+ "userName" +'"'+":"+'"'+or.getUsername()+'"'+ ","+
-                '"'+"callback_fail" + '"'+":"+'"'+or.getCallbackFail() +'"'+ ","+
-                '"'+ "callback_success" +'"'+":"+'"'+or.getCallbackSuccess()+'"'+ ","+
-                '"'+ "notification_url" +'"'+":"+'"'+or.getNotificationURL()+'"'+ ","+
-                '"'+ "origin" +'"'+":"+'"'+or.getOrigin()+'"'+
-                "}";
-
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = orderReqStr.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            return response.toString();
-        } catch (Exception e) {
-            //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
-            return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to create order"+'"'+"}";
-        }
     }
 
     //GetOrder
