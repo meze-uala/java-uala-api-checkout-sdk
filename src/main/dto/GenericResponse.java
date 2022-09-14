@@ -27,6 +27,22 @@ public class GenericResponse {
         this.code = code;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMissingTokenMessage() {
+        return missingTokenMessage;
+    }
+
+    public void setMissingTokenMessage(String missingTokenMessage) {
+        this.missingTokenMessage = missingTokenMessage;
+    }
+
     public String getDescription() {
         return description;
     }

@@ -2,8 +2,6 @@ package main.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class OrderResponse {
     @SerializedName("id")
     private String id;
