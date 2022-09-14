@@ -3,12 +3,16 @@ package test;
 import com.google.gson.Gson;
 import main.client.Client;
 import main.dto.*;
+import main.utils.Utils;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 
 public class OrderTest {
+
+    Utils utils = new Utils();
+
     //CreateOrder tests
     @Test
     public void invalidRequestShouldReturnErr() throws IOException {
@@ -16,7 +20,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest(null, null, null, null, null, null, null);
         String response = cli.createOrder(or, token);
 
@@ -33,7 +37,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest(null, "description", "javauser", "www.google.com", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
 
@@ -49,7 +53,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", "description", "", "www.google.com", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
 
@@ -65,7 +69,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", "description", "javauser", "", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
 
@@ -81,7 +85,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", "description", "javauser", "https://google.com.ar", "", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
 
@@ -97,7 +101,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", null, "javauser", "https://google.com.ar", "www.falso.com", null, null);
         String response = cli.createOrder(or, token);
 
@@ -115,7 +119,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
 
         String response = cli.getOrder("0fec34b8-b407-4381-8729-efb64c09fca5", token);
 
@@ -134,7 +138,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
 
         String response = cli.getOrder(null, token);
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
@@ -149,7 +153,7 @@ public class OrderTest {
         Gson gson = new Gson();
 
         Client cli = new Client();
-        String token = getToken(cli);
+        String token = utils.getToken(cli);
 
         String response = cli.getOrder("", token);
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
@@ -157,10 +161,4 @@ public class OrderTest {
         assertNotNull(gr.getMessage());
     }
 
-    public String getToken(Client cli) throws IOException {
-        AuthRequest req = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN",
-                "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
-        AuthResponse ar = cli.getEncoder().fromJson(cli.getAuthToken(req), AuthResponse.class);
-        return ar.getAccessToken();
-    }
 }
