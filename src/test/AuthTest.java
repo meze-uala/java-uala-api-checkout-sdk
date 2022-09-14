@@ -35,9 +35,9 @@ public class AuthTest {
         Gson gson = new Gson();
         AuthResponse ar = gson.fromJson(result, AuthResponse.class);
 
-        assertEquals("Bearer", ar.getToken_type());
-        assertNotNull(ar.getAccess_token());
-        assertNotNull(ar.getExpires_in());
+        assertEquals("Bearer", ar.getTokenType());
+        assertNotNull(ar.getAccessToken());
+        assertNotNull(ar.getExpiresIn());
     }
 
     @Test

@@ -1,12 +1,21 @@
 package main.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 public class OrderRequest {
+    @SerializedName("amount")
     private String amount;
+    @SerializedName("description")
     private String description;
+    @SerializedName("userName")
     private String username;
+    @SerializedName("callback_fail")
     private String callbackFail;
+    @SerializedName("callback_success")
     private String callbackSuccess;
+    @SerializedName("notification_url")
     private String notificationURL;
+    @SerializedName("origin")
     private String origin;
 
 
