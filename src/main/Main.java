@@ -29,7 +29,7 @@ public class Main {
                 "EMPRETIENDA");
 
 
-        String tokenTemporal = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlMyYW5BTjVYRWFjWU1qTXV2eFlZaiJ9.eyJpc3MiOiJodHRwczovL3VhbGEtYXJnLWFwaS1kZXYudXMuYXV0aDAuY29tLyIsInN1YiI6InFTQlJidE9iRm41R0pKbll2bTJNM3BTbjEzamdIUE1OQGNsaWVudHMiLCJhdWQiOiJodHRwczovL3VhbGEtYXJnLWFwaS1kZXYudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJpYXQiOjE2NjMwOTU5NzcsImV4cCI6MTY2MzE4MjM3NywiYXpwIjoicVNCUmJ0T2JGbjVHSkpuWXZtMk0zcFNuMTNqZ0hQTU4iLCJzY29wZSI6ImFwaV9jaGVja291dDpjcmVhdGUiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.oWKxcjt2pcwETcKz4-pO_JXLChlpb2Mwf213oY3VUWE21faKcg2aoZbD0Ri0OX6tksKH3g-EylV2ZqfFrJ34zUfHUN6fSR1CC7AY7CobpMWSXsoVsPjTQK4BZdIonaMM0lhdkl8S4v-PbFKh-XLlmWsCeSXNG4ju6rJqXOCgTG6hefW9GJYEHBCKZYhEE-FvmQEUdZ6Hh74tmJUAMnx8tpcLeL3QMv0texp2035D3apBUGDVoiX1WRrwvqglbpOG1XbOCg1kty18RvtrJcAVaRJsT3n4b6zH-FvyVVDQ-p9sdR1xwk4u4-8p2oc49A-WeTQBTDARzhmfISgH6T7G9A";
+        String tokenTemporal = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlMyYW5BTjVYRWFjWU1qTXV2eFlZaiJ9.eyJpc3MiOiJodHRwczovL3VhbGEtYXJnLWFwaS1kZXYudXMuYXV0aDAuY29tLyIsInN1YiI6InFTQlJidE9iRm41R0pKbll2bTJNM3BTbjEzamdIUE1OQGNsaWVudHMiLCJhdWQiOiJodHRwczovL3VhbGEtYXJnLWFwaS1kZXYudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJpYXQiOjE2NjMxODU5OTYsImV4cCI6MTY2MzI3MjM5NiwiYXpwIjoicVNCUmJ0T2JGbjVHSkpuWXZtMk0zcFNuMTNqZ0hQTU4iLCJzY29wZSI6ImFwaV9jaGVja291dDpjcmVhdGUiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.bliUV39wWHlSIpDByp5xsH5OYup3bvUdgBCS8Df46reB32z97YN3z0s043PHmxrQgAncajFwiBF-Yo1mrawUp2LnPzO2PDt5by3Tv-cW7LX04OpZSr-06aagckHhTxhUxp70CRrnZp_csP6uzkfkYe9pdz4dVLKToBcpiDTZb7x83jw5zcdyy7Y3T7xb1E9vttINNMF-RVwEoc5lS32ooKuXPdsKWbwvMRCeN-q45kYCTipkz-gRKqPneHQgkXrJcGVZNl_0GJK6xArH4nP1PKf-04ZpxQt2TBjjhI_4oIy87zg4qrjoyDp1QG5ZAxzy_i2nrKYV9jah8e-jC5uzDw";
 
         System.out.println(">>>>>>>>>>>>>>>>>");
         System.out.println("Creando una orden...");
@@ -52,7 +52,6 @@ public class Main {
         System.out.println("");
         System.out.println(respuesta3);
         System.out.println("");
-
 
     }
 }

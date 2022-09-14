@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 
 public class OrderTest {
-
+    //CreateOrder tests
     @Test
     public void invalidRequestShouldReturnErr() throws IOException {
 
@@ -106,6 +106,55 @@ public class OrderTest {
         assertEquals("Order", orderResponse.getType());
         assertNotNull(orderResponse.getId());
         assertNotNull(orderResponse.getUuid());
+    }
+
+    //GetOrder Tests
+    @Test
+    public void validOrderIDShouldReturnAnOrder() throws IOException {
+
+        Gson gson = new Gson();
+
+        Client cli = new Client();
+        String token = getToken(cli);
+
+        String response = cli.getOrder("0fec34b8-b407-4381-8729-efb64c09fca5", token);
+
+        GetOrderResponse getOrderResponse = gson.fromJson(response, GetOrderResponse.class);
+
+        assertEquals("0fec34b8-b407-4381-8729-efb64c09fca5", getOrderResponse.getOrderId());
+        assertEquals("PENDING", getOrderResponse.getStatus());
+        assertEquals("27e0c30b-0e09-4d3b-ad56-6cfaa126e381", getOrderResponse.getRefNumber());
+        assertEquals(12.12, getOrderResponse.getAmount());
+
+    }
+
+    @Test
+    public void nullOrderIdShouldReturnErr() throws IOException {
+
+        Gson gson = new Gson();
+
+        Client cli = new Client();
+        String token = getToken(cli);
+
+        String response = cli.getOrder(null, token);
+        GenericResponse gr = gson.fromJson(response, GenericResponse.class);
+
+        assertEquals("1006", gr.getCode());
+        assertEquals("no record found", gr.getMessage());
+    }
+
+    @Test
+    public void emptyOrderIdShouldReturnErr() throws IOException {
+
+        Gson gson = new Gson();
+
+        Client cli = new Client();
+        String token = getToken(cli);
+
+        String response = cli.getOrder("", token);
+        GenericResponse gr = gson.fromJson(response, GenericResponse.class);
+
+        assertNotNull(gr.getMessage());
     }
 
     public String getToken(Client cli) throws IOException {
