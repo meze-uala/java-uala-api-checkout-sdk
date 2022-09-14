@@ -161,27 +161,35 @@ public class Client {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
-    /**
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer content = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            content.append(inputLine);
-        }
-        in.close();
-    **/
+        int status = con.getResponseCode();
 
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        Reader streamReader = null;
+
+        if (status > 299) {
+            streamReader = new InputStreamReader(con.getErrorStream());
+        } else {
+            streamReader = new InputStreamReader(con.getInputStream());
+        }
+
+        try {
+            BufferedReader in = new BufferedReader(streamReader);
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
             }
-            return response.toString();
-        } catch (Exception e) {
-            //TODO ver el response en caso de fail. Actualmente ante una falta de user por ej, retorna esto y no lo mismo q por otro Cliente
-            return "{"+'"'+"message"+'"'+":"+'"'+"an error occurred when trying to create order"+'"'+"}";
+            in.close();
+
+            if (status > 299) {
+                GenericResponse gr = getEncoder().fromJson(content.toString(), GenericResponse.class);
+                return getEncoder().toJson(gr);
+            } else {
+                GetOrderResponse getOrderResponse = getEncoder().fromJson(content.toString(), GetOrderResponse.class);
+                return getEncoder().toJson(getOrderResponse);
+            }
+        } catch (Exception e){
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
+            return getEncoder().toJson(gr);
         }
     }
 
