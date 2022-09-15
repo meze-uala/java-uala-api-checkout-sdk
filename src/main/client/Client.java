@@ -33,6 +33,19 @@ public class Client {
         }
     }
 
+    public Client(String environment){
+        if(environment.toLowerCase().equals(Environment.STAGE.getEnvironment())){
+            Config config = new Config(Environment.STAGE.getEnvironment());
+            this.config = config;
+        } else if (environment.toLowerCase().equals(Environment.PRODUCTION.getEnvironment())){
+            Config config = new Config(Environment.PRODUCTION.getEnvironment());
+            this.config = config;
+        } else {
+            Config config = new Config(Environment.STAGE.getEnvironment());
+            this.config = config;
+        }
+    }
+
     public Config getConfig() {
         return config;
     }

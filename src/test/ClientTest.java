@@ -44,4 +44,22 @@ public class ClientTest {
 
         assertEquals("stage", cli.getConfig().getEnvironment());
     }
+
+    @Test
+    public void createATestWithStageEnvironmentShouldCreateAClientInstance(){
+        Client client = new Client("StaGE");
+        assertEquals("stage", client.getConfig().getEnvironment());
+    }
+
+    @Test
+    public void createATestWithProductionEnvironmentShouldCreateAClientInstance(){
+        Client client = new Client("PRODUCTION");
+        assertEquals("production", client.getConfig().getEnvironment());
+    }
+
+    @Test
+    public void createATestWithRandomEnvironmentShouldCreateAStageClientInstance(){
+        Client client = new Client("BOCA2000");
+        assertEquals("stage", client.getConfig().getEnvironment());
+    }
 }
