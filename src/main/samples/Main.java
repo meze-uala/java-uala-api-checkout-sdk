@@ -39,7 +39,7 @@ public class Main {
         System.out.println(respuesta);
 
         //Prepare CreateOrder (also know as 'checkout') request
-        OrderRequest or = new OrderRequest("12.12", "TE QUIERO DIEGOOOOOOOO!", "javauser",
+        OrderRequest or = new OrderRequest("1986.10", "Copa Mundial Original", "javauser",
                 "https://www.fracaso.com.ar","https://www.exito.com", "https://www.notify.me.com.ar",
                 "ECOMMERCE");
 
@@ -59,7 +59,7 @@ public class Main {
 
         System.out.println(">>>>>>>>>>>>>>>>>");
         System.out.println("Getting an order -->");
-        String orderID = "0fec34b8-b407-4381-8729-efb64c09fca5";
+        String orderID = "82b41bb1-ae75-40a0-a3c7-ffb35903a484";
         String respuesta3 = client.getOrder(orderID, tempToken);
         System.out.println("Order retrieved -->");
         System.out.println(respuesta3);
