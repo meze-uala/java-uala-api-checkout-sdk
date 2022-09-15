@@ -1,8 +1,8 @@
-# Java API Checkout SDK
+# Java API Checkout SDK  
 
 <img align="right" width="159px" src="./duke.png">
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
+[![Version](https://img.shields.io/badge/version-1.0.0--beta-blue)]()
 [![Coverage](https://img.shields.io/badge/coverage-88%25-green})]()
 [![Java version](https://img.shields.io/badge/Java%20Version-1.8-orange)]()
 
@@ -53,6 +53,7 @@ El Cliente esta desarrollado haciendo uso de la version 8 de Java. La versión m
 
 Para instalar el sdk en tu aplicación, deberás importar el jar como dependencia.
 
+//TODO link de descargas de jars aqui :)
 
 ## Como usarlo
 
