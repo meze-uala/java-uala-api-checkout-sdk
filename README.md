@@ -175,6 +175,6 @@ lectura altamente recomendada, el sitio de
 ## Colaboradores
 
 - Lagger, Pablo      - pablo.lagger@uala.com.ar
-- Crisaafulli, Bruno - bruno.crisafulli@uala.com.ar
+- Crisafulli, Bruno - bruno.crisafulli@uala.com.ar
 - Segura, Sebastian  - sebastian.segura@uala.com.ar
 - Meze               - martin.abogado@uala.com.ar
