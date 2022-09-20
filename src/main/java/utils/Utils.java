@@ -1,8 +1,8 @@
-package main.utils;
+package utils;
 
-import main.client.Client;
-import main.dto.AuthRequest;
-import main.dto.AuthResponse;
+import client.Client;
+import dto.AuthRequest;
+import dto.AuthResponse;
 
 import java.io.IOException;
 

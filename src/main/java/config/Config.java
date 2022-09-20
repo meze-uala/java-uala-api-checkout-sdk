@@ -1,4 +1,6 @@
-package main.config;
+package config;
+
+import config.*;
 
 public class Config {
 

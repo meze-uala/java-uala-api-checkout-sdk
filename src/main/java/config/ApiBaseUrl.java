@@ -1,4 +1,4 @@
-package main.config;
+package config;
 
 public enum ApiBaseUrl {
     STAGE("https://checkout.stage.ua.la/1"),

@@ -1,9 +1,7 @@
-package test;
-
-import main.config.ApiBaseUrl;
-import main.config.AuthApiBaseUrl;
-import main.config.Config;
-import main.config.Environment;
+import config.ApiBaseUrl;
+import config.AuthApiBaseUrl;
+import config.Config;
+import config.Environment;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

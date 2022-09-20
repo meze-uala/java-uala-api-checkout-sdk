@@ -1,4 +1,4 @@
-package main.config;
+package config;
 
 public enum AuthApiBaseUrl {
     STAGE("https://auth.stage.ua.la/1/auth"),

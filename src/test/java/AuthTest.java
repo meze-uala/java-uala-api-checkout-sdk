@@ -1,10 +1,6 @@
-package test;
-
+import client.Client;
 import com.google.gson.Gson;
-import main.client.Client;
-import main.dto.AuthRequest;
-import main.dto.AuthResponse;
-import main.dto.GenericResponse;
+import dto.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,7 +11,7 @@ public class AuthTest {
 
     @Test
     public void invalidRequestBodyShouldReturnErr() throws IOException {
-        Client client = new Client();
+        Client client = new Client(true);
         AuthRequest request = new AuthRequest(null, null, null);
         String result = client.getAuthToken(request);
 
@@ -28,7 +24,7 @@ public class AuthTest {
 
     @Test
     public void validRequestShouldPass() throws IOException {
-        Client client = new Client();
+        Client client = new Client(true);
         AuthRequest request = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN", "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
         String result = client.getAuthToken(request);
 
@@ -42,7 +38,7 @@ public class AuthTest {
 
     @Test
     public void requestWitInvalidUserShouldReturnNotFoundErr() throws IOException {
-        Client client = new Client();
+        Client client = new Client(true);
         AuthRequest request = new AuthRequest("javauserfake", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN", "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
         String result = client.getAuthToken(request);
 
@@ -56,7 +52,7 @@ public class AuthTest {
 
     @Test
     public void requestWithInvalidClientIdShouldReturnErr() throws IOException {
-        Client client = new Client();
+        Client client = new Client(true);
         AuthRequest request = new AuthRequest("javauser", "-", "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
         String result = client.getAuthToken(request);
 
@@ -70,7 +66,7 @@ public class AuthTest {
 
     @Test
     public void requestWithInvalidClientSecretIdShouldReturnErr() throws IOException {
-        Client client = new Client();
+        Client client = new Client(true);
         AuthRequest request = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN", "diegol");
         String result = client.getAuthToken(request);
 

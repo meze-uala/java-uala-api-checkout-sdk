@@ -1,10 +1,10 @@
-package main.samples;
+package samples;
 
-import main.client.Client;
-import main.config.Config;
-import main.dto.AuthRequest;
-import main.dto.OrderRequest;
-import main.utils.Utils;
+import client.Client;
+import config.Config;
+import dto.AuthRequest;
+import dto.OrderRequest;
+import utils.Utils;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class Main {
         //You can also create an instance of client with others constructors.
         //The other one is passing the environment as String parameter
 
-        Client client2 = new Client("stage");
+        Client client2 = new Client(true);
         System.out.println("Environment of client2: "+ client.getConfig().getEnvironment());
 
         //And the last one is creating a config and pass it as parameter
