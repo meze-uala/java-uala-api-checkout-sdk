@@ -1,10 +1,6 @@
-package test;
-
+import client.Client;
 import com.google.gson.Gson;
-import main.client.Client;
-import main.dto.AuthRequest;
-import main.dto.AuthResponse;
-import main.dto.GenericResponse;
+import dto.*;
 import org.junit.Test;
 
 import java.io.IOException;

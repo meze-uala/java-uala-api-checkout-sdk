@@ -1,9 +1,7 @@
-package test;
-
+import client.Client;
 import com.google.gson.Gson;
-import main.client.Client;
-import main.dto.*;
-import main.utils.Utils;
+import dto.*;
+import utils.Utils;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

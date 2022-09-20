@@ -1,4 +1,4 @@
-package main.dto;
+package dto;
 
 import com.google.gson.annotations.SerializedName;
 

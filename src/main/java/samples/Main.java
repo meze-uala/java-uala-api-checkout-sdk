@@ -1,10 +1,10 @@
-package main.samples;
+package samples;
 
-import main.client.Client;
-import main.config.Config;
-import main.dto.AuthRequest;
-import main.dto.OrderRequest;
-import main.utils.Utils;
+import client.Client;
+import config.Config;
+import dto.AuthRequest;
+import dto.OrderRequest;
+import utils.Utils;
 
 import java.io.IOException;
 

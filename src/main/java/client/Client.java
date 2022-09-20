@@ -1,9 +1,8 @@
-package main.client;
+package client;
 
 import com.google.gson.Gson;
-import main.config.Config;
-import main.config.Environment;
-import main.dto.*;
+import config.*;
+import dto.*;
 
 import java.io.*;
 import java.net.HttpURLConnection; 
