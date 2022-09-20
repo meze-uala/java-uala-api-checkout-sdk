@@ -18,31 +18,26 @@ public class Client {
         this.encoder = new Gson();
     }
 
-    public Client(){
-        String environment = System.getProperty("ENVIRONMENT");
-        Config config;
-        this.encoder = new Gson();
-        if(environment != null && (environment.toLowerCase().equals(Environment.STAGE.getEnvironment()) ||
-                environment.toLowerCase().equals(Environment.PRODUCTION.getEnvironment()))){
-            config = new Config(environment.toLowerCase());
-            this.config = config;
+    /**
+     * This constructor allows to choose the client's environment from UalaBis
+     * @param isDev define environment for client instance. Default value is prod
+     */
+    public Client(boolean isDev){
+
+        if (isDev) {
+            this.config = new Config(Environment.STAGE.getEnvironment());
         } else {
-            Config defaultConfig = new Config("STAGE");
-            this.config = defaultConfig;
+            this.config = new Config(Environment.PRODUCTION.getEnvironment());
         }
+        this.encoder = new Gson();
     }
 
-    public Client(String environment){
-        if(environment.toLowerCase().equals(Environment.STAGE.getEnvironment())){
-            Config config = new Config(Environment.STAGE.getEnvironment());
-            this.config = config;
-        } else if (environment.toLowerCase().equals(Environment.PRODUCTION.getEnvironment())){
-            Config config = new Config(Environment.PRODUCTION.getEnvironment());
-            this.config = config;
-        } else {
-            Config config = new Config(Environment.STAGE.getEnvironment());
-            this.config = config;
-        }
+    /**
+     * This constructor returns a Production environment Client from UalaBis
+     */
+    public Client() {
+        this.config = new Config(Environment.PRODUCTION.getEnvironment());
+        this.encoder = new Gson();
     }
 
     public Config getConfig() {
@@ -70,9 +65,7 @@ public class Client {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
-        //Gson gson = new Gson();
         String gsonRequest = getEncoder().toJson(request);
-
 
         try(OutputStream os = con.getOutputStream()) {
             byte[] input = gsonRequest.getBytes("utf-8");

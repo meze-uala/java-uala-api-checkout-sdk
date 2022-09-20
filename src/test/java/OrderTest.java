@@ -17,7 +17,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest(null, null, null, null, null, null, null);
         String response = cli.createOrder(or, token);
@@ -34,7 +34,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest(null, "description", "javauser", "www.google.com", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
@@ -50,7 +50,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", "description", "", "www.google.com", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
@@ -66,7 +66,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", "description", "javauser", "", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
@@ -82,7 +82,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", "description", "javauser", "https://google.com.ar", "", "www.notifications.com", "TUVIEJA");
         String response = cli.createOrder(or, token);
@@ -98,7 +98,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
         OrderRequest or = new OrderRequest("1.12", null, "javauser", "https://google.com.ar", "www.falso.com", null, null);
         String response = cli.createOrder(or, token);
@@ -116,7 +116,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
 
         String response = cli.getOrder("0fec34b8-b407-4381-8729-efb64c09fca5", token);
@@ -135,7 +135,7 @@ public class OrderTest {
 
         Gson gson = new Gson();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         String token = utils.getToken(cli);
 
         String response = cli.getOrder(null, token);

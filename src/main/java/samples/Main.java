@@ -19,7 +19,7 @@ public class Main {
         //You can also create an instance of client with others constructors.
         //The other one is passing the environment as String parameter
 
-        Client client2 = new Client("stage");
+        Client client2 = new Client(true);
         System.out.println("Environment of client2: "+ client.getConfig().getEnvironment());
 
         //And the last one is creating a config and pass it as parameter
