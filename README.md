@@ -1,6 +1,6 @@
 # Java API Checkout SDK  
 
-<img align="right" width="159px" src="./duke.png">
+<img align="right" src="./javabis.png">
 
 [![Version](https://img.shields.io/badge/version-1.0.0--beta-blue)]()
 [![Coverage](https://img.shields.io/badge/coverage-88%25-green})]()
@@ -61,13 +61,12 @@ Luego de haber importado como dependencia el jar del sdk, primero debemos crear 
 
 
 ###Crear un Cliente
-La opción mas simple es indicando el entorno (STAGE-PRODUCCION)
+La opción mas simple es indicar si el entorno es o no de prueba (STAGE-PRODUCCION) - (true - false)
 ```
-Client client = new Client("STAGE");
+Client client = new Client(true);
 ```
 
-Existe tambien una variante, que puede tomar las properties, y en caso de encontrar una bajo el key "ENVIRONMENT'
-creará una instancia acorde al valor encontrado. Si es un valor no valido, por default se retornará una instancia de *stage*
+Existe tambien una variante, que no posee parámetros y que nos retorna una instancia *PRODUCTIVA* del client.
 
 ```
 Client client = new Client();
