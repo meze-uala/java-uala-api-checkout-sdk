@@ -77,7 +77,6 @@ public class Client {
 
     //GetOrder
     public String getOrder(String orderID, String authToken) {
-
         try {
             return this.orderService.getOrder(orderID, authToken);
         } catch (Exception e){
