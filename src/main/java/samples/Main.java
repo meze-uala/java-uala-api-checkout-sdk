@@ -14,18 +14,17 @@ public class Main {
 
         //Instance of Client. This constructor read the property with key 'ENVIRONMENT'
         //that allows only 'stage' and 'production'. If none is set, create a Stage instance
-        Client client = new Client();
+        Client client = new Client(true);
 
         //You can also create an instance of client with others constructors.
         //The other one is passing the environment as String parameter
 
-        Client client2 = new Client(true);
         System.out.println("Environment of client2: "+ client.getConfig().getEnvironment());
 
         //And the last one is creating a config and pass it as parameter
         Config sampleConfig = new Config("stage");
-        Client client3 = new Client(sampleConfig);
-        System.out.println("Environment of client3: "+client3.getConfig().getEnvironment());
+        Client client2 = new Client(sampleConfig);
+        System.out.println("Environment of client3: "+client2.getConfig().getEnvironment());
 
         //Prepare the request
         AuthRequest req = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN",
