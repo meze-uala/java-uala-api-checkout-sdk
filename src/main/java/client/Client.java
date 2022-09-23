@@ -6,7 +6,6 @@ import dto.*;
 import service.AuthService;
 import service.OrderService;
 
-import java.io.*;
 
 public class Client {
 
@@ -47,19 +46,44 @@ public class Client {
         this.orderService = new OrderService(config, this.getEncoder());
     }
 
-
-
-    public String getAuthToken(AuthRequest request) throws IOException {
-        return this.authService.getAuthToken(request);
+    public Client(boolean isDev, AuthService authService, OrderService orderService){
+        if (isDev) {
+            this.config = new Config(Environment.STAGE.getEnvironment());
+        } else {
+            this.config = new Config(Environment.PRODUCTION.getEnvironment());
+        }
+        this.encoder = new Gson();
+        this.authService = authService;
+        this.orderService = orderService;
     }
 
-    public String createOrder(OrderRequest or, String authToken) throws IOException {
-        return this.orderService.createOrder(or, authToken);
+    public String getAuthToken(AuthRequest request) {
+        try {
+            return this.authService.getAuthToken(request);
+        } catch (Exception e) {
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
+            return getEncoder().toJson(gr);
+        }
+    }
+
+    public String createOrder(OrderRequest or, String authToken) {
+        try {
+            return this.orderService.createOrder(or, authToken);
+        } catch (Exception e){
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to create order", null, null);
+            return getEncoder().toJson(gr);
+        }
     }
 
     //GetOrder
-    public String getOrder(String orderID, String authToken) throws IOException {
-        return this.orderService.getOrder(orderID, authToken);
+    public String getOrder(String orderID, String authToken) {
+
+        try {
+            return this.orderService.getOrder(orderID, authToken);
+        } catch (Exception e){
+            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get order", null, null);
+            return getEncoder().toJson(gr);
+        }
     }
 
     public Config getConfig() {

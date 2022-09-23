@@ -49,7 +49,6 @@ public class OrderService implements IOrderService{
         }
 
         try {
-
             BufferedReader in = new BufferedReader(streamReader);
             String inputLine;
             StringBuffer content = new StringBuffer();
@@ -66,8 +65,7 @@ public class OrderService implements IOrderService{
                 return getEncoder().toJson(orderResponse);
             }
         } catch (Exception e){
-            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
-            return getEncoder().toJson(gr);
+             throw new IOException("An exception occurred when trying to create order.");
         }
     }
 
@@ -108,8 +106,7 @@ public class OrderService implements IOrderService{
                 return getEncoder().toJson(getOrderResponse);
             }
         } catch (Exception e){
-            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
-            return getEncoder().toJson(gr);
+            throw new IOException("An exception occurred when trying to get order.");
         }
     }
 

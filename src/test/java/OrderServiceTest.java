@@ -1,13 +1,20 @@
 import client.Client;
 import com.google.gson.Gson;
-import dto.*;
-import utils.Utils;
+import config.Config;
+import dto.GenericResponse;
+import dto.GetOrderResponse;
+import dto.OrderRequest;
+import dto.OrderResponse;
 import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import service.OrderService;
+import utils.Utils;
 
 import java.io.IOException;
 
-public class OrderTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+public class OrderServiceTest {
 
     Utils utils = new Utils();
 
@@ -157,6 +164,29 @@ public class OrderTest {
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
         assertNotNull(gr.getMessage());
+    }
+
+    @Test
+    public void serviceWithEncoderShouldReturnIt(){
+        Client cli = new Client(true);
+        assertNotNull(cli.getOrderService().getEncoder());
+    }
+
+    @Test
+    public void serviceWithNullEncoderShouldReturnNullEncoder(){
+        Client cli = new Client(true);
+        cli.getOrderService().setEncoder(null);
+        assertNull(cli.getOrderService().getEncoder());
+    }
+
+    @Test
+    public void invalidConfigShouldBeRetreivedToo(){
+        Config cfg = new Config("stage");
+        OrderService os = new OrderService(cfg, null);
+        assertNotNull(os.getConfig());
+
+        os.setConfig(null);
+        assertNull(os.getConfig());
     }
 
 }

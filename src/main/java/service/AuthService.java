@@ -69,8 +69,7 @@ public class AuthService implements IAuthService {
                 return getEncoder().toJson(authResponse);
             }
         } catch (Exception e){
-            GenericResponse gr = new GenericResponse("999", "an error occurred when trying to get authToken", null, null);
-            return getEncoder().toJson(gr);
+           throw new IOException("An exception occurred when trying to get authToken");
         }
     }
 
