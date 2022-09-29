@@ -1,3 +1,5 @@
+package service;
+
 import client.Client;
 import com.google.gson.Gson;
 import config.Config;
@@ -6,7 +8,6 @@ import dto.GetOrderResponse;
 import dto.OrderRequest;
 import dto.OrderResponse;
 import org.junit.Test;
-import service.OrderService;
 import utils.Utils;
 
 import java.io.IOException;
