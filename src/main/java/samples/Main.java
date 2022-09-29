@@ -46,11 +46,9 @@ public class Main {
         //This utils is just for testing purpose, feel free to ignore it
         Utils utils = new Utils();
 
-        String tempToken = utils.getToken(client);
-
         System.out.println(">>>>>>>>>>>>>>>>>");
         System.out.println("Creating checkout order -->");
-        String respuesta2 = client.createOrder(or, tempToken);
+        String respuesta2 = client.createOrder(or);
         System.out.println("Order response -->");
         System.out.println(respuesta2);
         System.out.println("");
@@ -59,7 +57,7 @@ public class Main {
         System.out.println(">>>>>>>>>>>>>>>>>");
         System.out.println("Getting an order -->");
         String orderID = "82b41bb1-ae75-40a0-a3c7-ffb35903a484";
-        String respuesta3 = client.getOrder(orderID, tempToken);
+        String respuesta3 = client.getOrder(orderID);
         System.out.println("Order retrieved -->");
         System.out.println(respuesta3);
         System.out.println("");

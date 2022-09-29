@@ -5,6 +5,7 @@ import config.Config;
 import dto.*;
 import org.junit.Test;
 import service.AuthService;
+import service.NotificationService;
 import service.OrderService;
 
 import java.io.IOException;
@@ -71,8 +72,9 @@ public class ClientTest {
     public void invalidRequestBodyShouldReturnErr() throws IOException {
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService,mockedNotificationService);
         AuthRequest request = new AuthRequest(null, null, null);
 
         GenericResponse response = new GenericResponse("3001", "One or more required fields are empty", null, null);
@@ -95,13 +97,14 @@ public class ClientTest {
 
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
         Gson gson = new Gson();
 
         AuthResponse mar = new AuthResponse("abcdefghijklmnopqrstuvwxyz",
                 678, "Bearer");
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService,mockedNotificationService);
         AuthRequest request = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN", "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
 
         when(mockedAuthService.getAuthToken(request)).thenReturn(gson.toJson(mar));
@@ -121,8 +124,9 @@ public class ClientTest {
     public void exceptionShouldBeReturned() throws IOException {
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService,mockedNotificationService);
         AuthRequest request = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN", "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
 
         when(mockedAuthService.getAuthToken(request)).thenThrow(new IOException("Exception papa"));
@@ -143,8 +147,9 @@ public class ClientTest {
     public void validRequestShouldCreateAnOrder() throws IOException {
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService,mockedNotificationService);
 
         OrderRequest request = new OrderRequest("1986.10", "Copa Mundial Original", "javauser",
                 "https://www.fracaso.com.ar","https://www.exito.com", "https://www.notify.me.com.ar",
@@ -154,7 +159,9 @@ public class ClientTest {
 
         when(mockedOrderService.createOrder(request, "invalidToken")).thenReturn(client.getEncoder().toJson(response));
 
-        OrderResponse orderResponse  = client.getEncoder().fromJson(client.createOrder(request, "invalidToken"), OrderResponse.class);
+        client.setToken("invalidToken");
+
+        OrderResponse orderResponse  = client.getEncoder().fromJson(client.createOrder(request), OrderResponse.class);
 
         assertNotNull(orderResponse.getId());
         assertNotNull(orderResponse.getUuid());
@@ -164,8 +171,9 @@ public class ClientTest {
     public void invalidRequestShouldNotCreateAnOrder() throws IOException {
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
 
         OrderRequest request = new OrderRequest("1986.10", "Copa Mundial Original", "",
                 "https://www.fracaso.com.ar","https://www.exito.com", "https://www.notify.me.com.ar",
@@ -175,7 +183,8 @@ public class ClientTest {
 
         when(mockedOrderService.createOrder(request, "invalidToken")).thenReturn(client.getEncoder().toJson(gr));
 
-        GenericResponse genericResponse = client.getEncoder().fromJson(client.createOrder(request, "invalidToken"), GenericResponse.class);
+        client.setToken("invalidToken");
+        GenericResponse genericResponse = client.getEncoder().fromJson(client.createOrder(request), GenericResponse.class);
 
         assertNotNull(genericResponse.getCode());
         assertNotNull(genericResponse.getDescription());
@@ -186,8 +195,9 @@ public class ClientTest {
 
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
 
         OrderRequest request = new OrderRequest("1986.10", "Copa Mundial Original", "",
                 "https://www.fracaso.com.ar","https://www.exito.com", "https://www.notify.me.com.ar",
@@ -195,7 +205,9 @@ public class ClientTest {
 
         when(mockedOrderService.createOrder(request, "invalidToken")).thenThrow(new IOException("mockedException"));
 
-        GenericResponse genericResponse = client.getEncoder().fromJson(client.createOrder(request, "invalidToken"), GenericResponse.class);
+        client.setToken("invalidToken");
+
+        GenericResponse genericResponse = client.getEncoder().fromJson(client.createOrder(request), GenericResponse.class);
 
         assertNull(genericResponse.getMessage());
         assertEquals("999", genericResponse.getCode());
@@ -209,14 +221,17 @@ public class ClientTest {
 
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
 
         OrderResponse oresp = new OrderResponse("1", "Order", "1","1","032","1","FALSO", "1", null);
 
         when(mockedOrderService.getOrder("1", "tokenFalso")).thenReturn(client.getEncoder().toJson(oresp));
 
-        OrderResponse orderResponse = client.getEncoder().fromJson(client.getOrder("1", "tokenFalso"), OrderResponse.class);
+        client.setToken("tokenFalso");
+
+        OrderResponse orderResponse = client.getEncoder().fromJson(client.getOrder("1"), OrderResponse.class);
 
         assertEquals("1", orderResponse.getId());
         assertEquals("FALSO", orderResponse.getStatus());
@@ -227,14 +242,17 @@ public class ClientTest {
 
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
 
         GenericResponse gr = new GenericResponse("1006", "no record found","","");
 
         when(mockedOrderService.getOrder("abc", "tokenFalso")).thenReturn(client.getEncoder().toJson(gr));
 
-        GenericResponse genericResponse = client.getEncoder().fromJson(client.getOrder("abc", "tokenFalso"), GenericResponse.class);
+        client.setToken("tokenFalso");
+
+        GenericResponse genericResponse = client.getEncoder().fromJson(client.getOrder("abc"), GenericResponse.class);
 
         assertEquals("1006", genericResponse.getCode());
         assertEquals("no record found", genericResponse.getDescription());
@@ -245,12 +263,15 @@ public class ClientTest {
 
         AuthService mockedAuthService = mock(AuthService.class);
         OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
 
-        Client client = new Client(true, mockedAuthService, mockedOrderService);
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
 
         when(mockedOrderService.getOrder("1", "tokenFalso")).thenThrow(new IOException("mockedException"));
 
-        GenericResponse genericResponse = client.getEncoder().fromJson(client.getOrder("1", "tokenFalso"), GenericResponse.class);
+        client.setToken("tokenFalso");
+
+        GenericResponse genericResponse = client.getEncoder().fromJson(client.getOrder("1"), GenericResponse.class);
 
         assertEquals("999", genericResponse.getCode());
         assertEquals("an error occurred when trying to get order", genericResponse.getDescription());
