@@ -93,7 +93,8 @@ AuthRequest req = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN"
                 "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
 ```
 
-Una vez provistos se procede a realizar la llamada.
+Una vez provistos se procede a realizar la llamada. Este metodo, almacena en el cliente el token para ser empleado en
+los metodos que luego lo requieran.
 ``` 
 String respuesta = client.getAuthToken(req); 
 ```
@@ -111,18 +112,16 @@ Donde la respuesta tiene la siguiente forma (datos ilustrativos):
 
 ### Creacion de una orden
 
-Para crear una orden, debe invocarse al metodo *createOrder(OrderRequest or, String token)* 
-Tal como la firma lo indica, requiere crear un OrderRequest y proveer un token previamente obtenido.
+Para crear una orden, debe invocarse al metodo *createOrder(OrderRequest or)* 
+Tal como la firma lo indica, requiere proveer un OrderRequest.
 
 ```
 OrderRequest or = new OrderRequest("1986.10", "Copa Mundial Original", "javauser",
                 "https://www.fracaso.com.ar","https://www.exito.com", 
                 "https://www.notify.me.com.ar",
                 "ECOMMERCE");
-     
-String token  = "eyJhbGciOiJSUzI1NiIsCI6MTY2MzM0MjYaV9jaGVja291uF8EKajNA"                
-                
-String respuesta2 = client.createOrder(or, token); 
+                    
+String createdOrder = client.createOrder(or); 
                
 ```
 
@@ -144,13 +143,12 @@ Donde, en caso exitoso la respuesta tiene la siguiente forma:
 ### Obtencion de una orden
 
 A partir del id de una orden, podremos obtener información asociada utilizando el metodo 
-*getOrder(String orderID, String authToken)*
+*getOrder(String orderID)*
 
 ```
-String orderID = "82b41bb1-ae75-40a0-a3c7-ffb35903a484";
-String token = "eyJhbGciOiJSUzI1NiIsCI6MTY2MzM0MjYaV9jaGVja291uF8EKajNA";
+String orderID = "82b41bb1-ae75-40a0-a3c7-ffb35903a484"; 
 
-String orderResponse = client.getOrder(orderID, token);
+String orderResponse = client.getOrder(orderID);
 
 ```
 
