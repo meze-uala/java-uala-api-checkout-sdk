@@ -23,6 +23,7 @@ Las funciones disponibilizadas hasta el momento son las siguientes:
 - Get Auth Token
 - Create Order
 - Get Order
+- Get Failed Notifications
 
 <br>
 
@@ -160,6 +161,44 @@ Donde, en caso de éxito, orderResponse tiene la siguiente forma:
   "status":"PENDING",
   "ref_number":"a7448319-4b9a-4d71-8d27-6166629dced3",
   "amount":1986.1
+}
+```
+
+
+### Obtencion de notificaciones fallidas
+
+A partir de la invocación del metodo *getFailedNotifications()* podremos recuperar las notificaciones fallidas para
+el usuario. El mismo, no tiene parámetros, pero si requiere que el Client posea un token valido. Si este expiró,
+deberá obtenerse otro.
+
+``` 
+
+String failedNotifications = client.getFailedNotifications();
+
+```
+
+En caso de éxito, obtendremos una lista (puede ser vacía) de notificaciones, de la siguiente forma:
+
+```
+{
+    "notifications": [
+        {
+            "uuid": "9b115cab-c5df-47e1-bab8-61de8f1b19c7",
+            "account_id": "e5b801ef-06bf-40ed-8dc2-6bb2f2684b5e",
+            "status_code": 0,
+            "attempts": 1,
+            "amount": 10,
+            "created_date": "2022-09-29T19:16:38Z"
+        },
+        {
+            "uuid": "38d9f606-cf00-47b1-834b-debe9d5549fa",
+            "account_id": "e5b801ef-06bf-40ed-8dc2-6bb2f2684b5e",
+            "status_code": 403,
+            "attempts": 1,
+            "amount": 21.23,
+            "created_date": "2022-07-26T21:58:52Z"
+        }
+    ]
 }
 ```
 
