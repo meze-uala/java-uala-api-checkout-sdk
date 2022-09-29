@@ -1,3 +1,5 @@
+package service;
+
 import client.Client;
 import com.google.gson.Gson;
 import config.Config;
@@ -5,7 +7,6 @@ import dto.AuthRequest;
 import dto.AuthResponse;
 import dto.GenericResponse;
 import org.junit.Test;
-import service.AuthService;
 
 import static org.junit.jupiter.api.Assertions.*;
 

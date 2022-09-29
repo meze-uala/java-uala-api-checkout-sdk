@@ -1,4 +1,5 @@
-import client.*;
+package client;
+
 import com.google.gson.Gson;
 import config.Config;
 import dto.*;
