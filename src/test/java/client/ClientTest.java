@@ -9,6 +9,7 @@ import service.NotificationService;
 import service.OrderService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -275,5 +276,85 @@ public class ClientTest {
 
         assertEquals("999", genericResponse.getCode());
         assertEquals("an error occurred when trying to get order", genericResponse.getDescription());
+    }
+
+    @Test
+    public void exceptionCouldReturnGenericResponseErrOnGetFailedNotifications() throws IOException {
+        AuthService mockedAuthService = mock(AuthService.class);
+        OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
+
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
+
+        when(mockedNotificationService.getFailedNotifications("token")).thenThrow(new IOException("mockedException"));
+        client.setToken("token");
+
+        GenericResponse genericResponse = client.getEncoder().fromJson(client.getFailedNotifications(), GenericResponse.class);
+
+        assertEquals("999", genericResponse.getCode());
+        assertEquals("an error occurred when trying to get order", genericResponse.getDescription());
+    }
+
+    @Test
+    public void getFailedNotificationsReturnsNoRows() throws IOException {
+        AuthService mockedAuthService = mock(AuthService.class);
+        OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
+
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
+
+        FailedNotificationResponse failedNotificationResponse = new FailedNotificationResponse(new ArrayList<Notification>());
+
+        when(mockedNotificationService.getFailedNotifications("token")).thenReturn(client.getEncoder().toJson(failedNotificationResponse));
+
+        client.setToken("token");
+
+        FailedNotificationResponse fnr = client.getEncoder().fromJson(client.getFailedNotifications(), FailedNotificationResponse.class);
+
+        assertNotNull(fnr);
+        assertEquals(0, fnr.getNotifications().size());
+    }
+
+    @Test
+    public void getFailedNotificationsReturnsNull() throws IOException {
+        AuthService mockedAuthService = mock(AuthService.class);
+        OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
+
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
+
+        when(mockedNotificationService.getFailedNotifications("token")).thenReturn(client.getEncoder().toJson(null));
+
+        client.setToken("token");
+
+        FailedNotificationResponse fnr = client.getEncoder().fromJson(client.getFailedNotifications(), FailedNotificationResponse.class);
+
+        assertNull(fnr);
+    }
+
+    @Test
+    public void getFailedNotificationsReturnsResults() throws IOException {
+        AuthService mockedAuthService = mock(AuthService.class);
+        OrderService mockedOrderService = mock(OrderService.class);
+        NotificationService mockedNotificationService = mock(NotificationService.class);
+
+        Notification notification = new Notification("uuid", "acountId", 1,0,10.0, "hoy");
+
+        Client client = new Client(true, mockedAuthService, mockedOrderService, mockedNotificationService);
+
+        ArrayList<Notification> notifications = new ArrayList<>();
+        notifications.add(notification);
+
+        FailedNotificationResponse failedNotificationResponse = new FailedNotificationResponse(notifications);
+
+        when(mockedNotificationService.getFailedNotifications("token")).thenReturn(client.getEncoder().toJson(failedNotificationResponse));
+
+        client.setToken("token");
+
+        FailedNotificationResponse fnr = client.getEncoder().fromJson(client.getFailedNotifications(), FailedNotificationResponse.class);
+
+        assertNotNull(fnr);
+        assertEquals(1, fnr.getNotifications().size());
+        assertEquals(10.0, fnr.getNotifications().get(0).getAmount());
     }
 }
