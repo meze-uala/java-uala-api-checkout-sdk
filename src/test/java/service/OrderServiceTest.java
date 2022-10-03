@@ -27,8 +27,9 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
+        cli.setToken(token);
         OrderRequest or = new OrderRequest(null, null, null, null, null, null, null);
-        String response = cli.createOrder(or, token);
+        String response = cli.createOrder(or);
 
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
@@ -44,8 +45,9 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
+        cli.setToken(token);
         OrderRequest or = new OrderRequest(null, "description", "javauser", "www.google.com", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
-        String response = cli.createOrder(or, token);
+        String response = cli.createOrder(or);
 
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
@@ -60,8 +62,9 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
+        cli.setToken(token);
         OrderRequest or = new OrderRequest("1.12", "description", "", "www.google.com", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
-        String response = cli.createOrder(or, token);
+        String response = cli.createOrder(or);
 
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
@@ -76,8 +79,9 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
+        cli.setToken(token);
         OrderRequest or = new OrderRequest("1.12", "description", "javauser", "", "www.stackoverflow.com", "www.notifications.com", "TUVIEJA");
-        String response = cli.createOrder(or, token);
+        String response = cli.createOrder(or);
 
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
@@ -92,8 +96,9 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
+        cli.setToken(token);
         OrderRequest or = new OrderRequest("1.12", "description", "javauser", "https://google.com.ar", "", "www.notifications.com", "TUVIEJA");
-        String response = cli.createOrder(or, token);
+        String response = cli.createOrder(or);
 
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
@@ -108,8 +113,9 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
+        cli.setToken(token);
         OrderRequest or = new OrderRequest("1.12", null, "javauser", "https://google.com.ar", "www.falso.com", null, null);
-        String response = cli.createOrder(or, token);
+        String response = cli.createOrder(or);
 
         OrderResponse orderResponse = gson.fromJson(response, OrderResponse.class);
 
@@ -126,8 +132,8 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
-
-        String response = cli.getOrder("0fec34b8-b407-4381-8729-efb64c09fca5", token);
+        cli.setToken(token);
+        String response = cli.getOrder("0fec34b8-b407-4381-8729-efb64c09fca5");
 
         GetOrderResponse getOrderResponse = gson.fromJson(response, GetOrderResponse.class);
 
@@ -145,8 +151,8 @@ public class OrderServiceTest {
 
         Client cli = new Client(true);
         String token = utils.getToken(cli);
-
-        String response = cli.getOrder(null, token);
+        cli.setToken(token);
+        String response = cli.getOrder(null);
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
         assertEquals("1006", gr.getCode());
@@ -160,8 +166,9 @@ public class OrderServiceTest {
 
         Client cli = new Client();
         String token = utils.getToken(cli);
+        cli.setToken(token);
 
-        String response = cli.getOrder("", token);
+        String response = cli.getOrder("");
         GenericResponse gr = gson.fromJson(response, GenericResponse.class);
 
         assertNotNull(gr.getMessage());

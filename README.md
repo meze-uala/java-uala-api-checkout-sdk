@@ -3,7 +3,7 @@
 <img align="right" src="./javabis.png">
 
 [![Version](https://img.shields.io/badge/version-1.0.0--beta-blue)]()
-[![Coverage](https://img.shields.io/badge/coverage-88%25-green})]()
+[![Coverage](https://img.shields.io/badge/coverage-97%25-brightgreen)]()
 [![Java version](https://img.shields.io/badge/Java%20Version-1.8-orange)]()
 
 Este sdk es una herramienta que permite realizar ciertas acciones de una forma mas fácil sin tener que
@@ -23,6 +23,7 @@ Las funciones disponibilizadas hasta el momento son las siguientes:
 - Get Auth Token
 - Create Order
 - Get Order
+- Get Failed Notifications
 
 <br>
 
@@ -93,7 +94,8 @@ AuthRequest req = new AuthRequest("javauser", "qSBRbtObFn5GJJnYvm2M3pSn13jgHPMN"
                 "vVvbYMTmNKggv11naxMfbZ7qbdo6SKS985SwZYE0FSsfewNMKXwpzxemr6DKoQ-8");
 ```
 
-Una vez provistos se procede a realizar la llamada.
+Una vez provistos se procede a realizar la llamada. Este metodo, almacena en el cliente el token para ser empleado en
+los metodos que luego lo requieran.
 ``` 
 String respuesta = client.getAuthToken(req); 
 ```
@@ -111,18 +113,16 @@ Donde la respuesta tiene la siguiente forma (datos ilustrativos):
 
 ### Creacion de una orden
 
-Para crear una orden, debe invocarse al metodo *createOrder(OrderRequest or, String token)* 
-Tal como la firma lo indica, requiere crear un OrderRequest y proveer un token previamente obtenido.
+Para crear una orden, debe invocarse al metodo *createOrder(OrderRequest or)* 
+Tal como la firma lo indica, requiere proveer un OrderRequest.
 
 ```
 OrderRequest or = new OrderRequest("1986.10", "Copa Mundial Original", "javauser",
                 "https://www.fracaso.com.ar","https://www.exito.com", 
                 "https://www.notify.me.com.ar",
                 "ECOMMERCE");
-     
-String token  = "eyJhbGciOiJSUzI1NiIsCI6MTY2MzM0MjYaV9jaGVja291uF8EKajNA"                
-                
-String respuesta2 = client.createOrder(or, token); 
+                    
+String createdOrder = client.createOrder(or); 
                
 ```
 
@@ -144,13 +144,12 @@ Donde, en caso exitoso la respuesta tiene la siguiente forma:
 ### Obtencion de una orden
 
 A partir del id de una orden, podremos obtener información asociada utilizando el metodo 
-*getOrder(String orderID, String authToken)*
+*getOrder(String orderID)*
 
 ```
-String orderID = "82b41bb1-ae75-40a0-a3c7-ffb35903a484";
-String token = "eyJhbGciOiJSUzI1NiIsCI6MTY2MzM0MjYaV9jaGVja291uF8EKajNA";
+String orderID = "82b41bb1-ae75-40a0-a3c7-ffb35903a484"; 
 
-String orderResponse = client.getOrder(orderID, token);
+String orderResponse = client.getOrder(orderID);
 
 ```
 
@@ -162,6 +161,44 @@ Donde, en caso de éxito, orderResponse tiene la siguiente forma:
   "status":"PENDING",
   "ref_number":"a7448319-4b9a-4d71-8d27-6166629dced3",
   "amount":1986.1
+}
+```
+
+
+### Obtencion de notificaciones fallidas
+
+A partir de la invocación del metodo *getFailedNotifications()* podremos recuperar las notificaciones fallidas para
+el usuario. El mismo, no tiene parámetros, pero si requiere que el Client posea un token valido. Si este expiró,
+deberá obtenerse otro.
+
+``` 
+
+String failedNotifications = client.getFailedNotifications();
+
+```
+
+En caso de éxito, obtendremos una lista (puede ser vacía) de notificaciones, de la siguiente forma:
+
+```
+{
+    "notifications": [
+        {
+            "uuid": "9b115cab-c5df-47e1-bab8-61de8f1b19c7",
+            "account_id": "e5b801ef-06bf-40ed-8dc2-6bb2f2684b5e",
+            "status_code": 0,
+            "attempts": 1,
+            "amount": 10,
+            "created_date": "2022-09-29T19:16:38Z"
+        },
+        {
+            "uuid": "38d9f606-cf00-47b1-834b-debe9d5549fa",
+            "account_id": "e5b801ef-06bf-40ed-8dc2-6bb2f2684b5e",
+            "status_code": 403,
+            "attempts": 1,
+            "amount": 21.23,
+            "created_date": "2022-07-26T21:58:52Z"
+        }
+    ]
 }
 ```
 
