@@ -3,7 +3,7 @@
 <img align="right" src="./javabis.png">
 
 [![Version](https://img.shields.io/badge/version-1.0.0--beta-blue)]()
-[![Coverage](https://img.shields.io/badge/coverage-88%25-green})]()
+[![Coverage](https://img.shields.io/badge/coverage-97%25-brightgreen)]()
 [![Java version](https://img.shields.io/badge/Java%20Version-1.8-orange)]()
 
 Este sdk es una herramienta que permite realizar ciertas acciones de una forma mas fácil sin tener que
