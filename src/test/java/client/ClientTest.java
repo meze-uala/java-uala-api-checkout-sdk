@@ -357,4 +357,36 @@ public class ClientTest {
         assertEquals(1, fnr.getNotifications().size());
         assertEquals(10.0, fnr.getNotifications().get(0).getAmount());
     }
+
+    @Test
+    public void aClientCouldBeCreatedWithDiffServices(){
+        Client cli = new Client(true,null, null, null);
+        assertEquals(null, cli.getAuthService());
+        assertEquals(null, cli.getOrderService());
+        assertEquals(null, cli.getNotificationService());
+
+        NotificationService ns = new NotificationService(null, null);
+        AuthService as = new AuthService(null, null);
+        OrderService os = new OrderService(null, null);
+
+        cli.setAuthService(as);
+        cli.setOrderService(os);
+        cli.setNotificationService(ns);
+
+        assertNotNull(cli.getAuthService());
+        assertNotNull(cli.getOrderService());
+        assertNotNull(cli.getNotificationService());
+    }
+
+    @Test
+    public void canCreateADefaultProductiveClient(){
+        Client cli = new Client(false);
+        assertEquals("production", cli.getConfig().getEnvironment());
+    }
+
+    @Test
+    public void canCreateAProductiveClientWithoutServices(){
+        Client cli = new Client(false, null, null, null);
+        assertEquals("production", cli.getConfig().getEnvironment());
+    }
 }
