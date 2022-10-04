@@ -61,7 +61,7 @@ Para instalar el sdk en tu aplicación, deberás importar el jar como dependenci
 Luego de haber importado como dependencia el jar del sdk, primero debemos crear una instancia del cliente.
 
 
-###Crear un Cliente
+### Crear un Cliente
 La opción mas simple es indicar si el entorno es o no de prueba (STAGE-PRODUCCION) - (true - false)
 ```
 Client client = new Client(true);
