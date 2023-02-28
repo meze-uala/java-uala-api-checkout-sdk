@@ -27,6 +27,7 @@ public class AuthService implements IAuthService {
             return invalidAuthRequest();
         }
 
+        //TODO: Aplicar patron DRY (don't repeat yourself), en todos los services, estas conexiones se repiten en muchas clases
         URL url = new URL(String.format("%s%s", config.getAuthAPIbaseUrl(), "/token"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
