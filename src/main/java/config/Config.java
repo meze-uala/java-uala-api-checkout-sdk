@@ -9,7 +9,7 @@ public class Config {
     private final String authAPIbaseUrl;
 
     public Config(String environment) {
-        //TODO mejorar con un switch, manejando el toStr del enum
+        //TODO: mejorar con un switch, manejando el toStr del enum
         if (environment.toLowerCase().equals(Environment.STAGE.getEnvironment())){
             this.apiBaseUrl =  ApiBaseUrl.STAGE.getBaseUrl();
             this.authAPIbaseUrl = AuthApiBaseUrl.STAGE.getAuthUrl();

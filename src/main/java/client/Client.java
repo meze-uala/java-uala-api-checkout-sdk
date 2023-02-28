@@ -9,6 +9,18 @@ import service.OrderService;
 import utils.*;
 
 
+// La instanciación de client confunde por su parametro booleano, a la vez que la limita a solo 2 ambientes. Propongo usar una white list de strings, con los ambientes activos, para indicar el entorno. EJ: 'stage', 'STAGE', 'Production', 'production'. Sin importar mayusculas o minusculas en su validación. En la class Config existe esta lógica, reutilizarla.
+
+// ```
+// UalaApiCheckoutClient client = new UalaApiCheckoutClient('production');
+// ```
+
+// Hay que modificar un poco ese constructor pero la clase queda mucha mas entendible con un string como parametro, además se podría modificar el nombre para que sea similar al que usa el sdk de nodejs.
+
+// Al ser una libreria publica estaría bueno que:
+// - todos los SDK se instancien de forma similar, dandole al programador una mejor experiencia de desarrollo. (si 1 sdk se instancia indicando el ambiente, todos los sdk deben manejar ambientes al inicializarlos)
+// - cuando esté escribiendo codigo y necesite utilizar un método del sdk pueda leer su documentación en el instante que lo utilizo (javadocs)
+
 public class Client {
 
     private Config config;
@@ -91,6 +103,7 @@ public class Client {
     }
 
     //GetOrder
+    //FIXME: Comentarios descriptivos
     public String getOrder(String orderID) {
         try {
             return this.orderService.getOrder(orderID, this.getToken());
